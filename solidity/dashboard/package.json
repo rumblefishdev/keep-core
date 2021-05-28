@@ -49,6 +49,7 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-keep": "git+https://github.com/keep-network/eslint-config-keep.git",
+    "redux-devtools-extension": "^2.13.9",
     "prettier": "^2.0.4"
   },
   "browserslist": [
