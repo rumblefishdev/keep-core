@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"os"
 	"time"
 
 	"github.com/keep-network/keep-core/pkg/diagnostics"
@@ -23,6 +24,9 @@ import (
 	"github.com/keep-network/keep-core/pkg/net/retransmission"
 	"github.com/keep-network/keep-core/pkg/operator"
 	"github.com/urfave/cli"
+
+	pm2io "github.com/keymetrics/pm2-io-apm-go"
+	"github.com/keymetrics/pm2-io-apm-go/structures"
 )
 
 // StartCommand contains the definition of the start command-line subcommand.
@@ -68,6 +72,39 @@ func init() {
 		}
 }
 
+func startPM2() error {
+	// #nosec G101 (look for hardcoded credentials)
+	// This line doesn't contain any credentials.
+	// It's just the name of the environment variable.
+	pm2PublicKeyName := "PM2_PUBLIC_KEY"
+
+	// #nosec G101 (look for hardcoded credentials)
+	// This line doesn't contain any credentials.
+	// It's just the name of the environment variable.
+	pm2PrivateKeyName := "PM2_PRIVATE_KEY"
+
+	pm2PublicKey := os.Getenv(pm2PublicKeyName)
+	pm2PrivateKey := os.Getenv(pm2PrivateKeyName)
+	if pm2PublicKey == "" {
+		return fmt.Errorf("set environment variable %v to the pm2 public key", pm2PublicKeyName)
+	}
+
+	if pm2PrivateKey == "" {
+		return fmt.Errorf("set environment variable %v to the pm2 private key", pm2PrivateKey)
+	}
+
+	pm2 := pm2io.Pm2Io{
+		Config: &structures.Config{
+			PublicKey:  pm2PublicKey,  // define the public key given in the dashboard
+			PrivateKey: pm2PrivateKey, // define the private key given in the dashboard
+			Name:       "Keep-Core",   // define an application name
+		},
+	}
+
+	pm2.Start()
+	return nil
+}
+
 // Start starts a node; if it's not a bootstrap node it will get the Node.URLs
 // from the config file
 func Start(c *cli.Context) error {
@@ -90,6 +127,12 @@ func Start(c *cli.Context) error {
 			config.Ethereum.Account.KeyFile,
 			err,
 		)
+	}
+
+	err = startPM2()
+	if err != nil {
+		logger.Infof("PM2 monitoring not started, reason: %v", err)
+		err = nil
 	}
 
 	chainProvider, err := ethereum.Connect(config.Ethereum)
