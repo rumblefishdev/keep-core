@@ -1,0 +1,23 @@
+[ethereum]
+  URL = "ws://127.0.0.1:5050"
+  URLRPC = "http://127.0.0.1:5050"
+  ConcurrencyLimit = 2
+  RequestsPerSecondLimit = 2
+  MiningCheckInterval = 100
+  
+[ethereum.account]
+  Address = "0xd31653ef028dd783001bb78f8784539a44e22718"
+  KeyFile = "UTC--2021-04-14T10-14-40.670186000Z--d31653ef028dd783001bb78f8784539a44e22718"
+
+[ethereum.ContractAddresses]
+  KeepRandomBeaconOperator = "0x50D856DB7a4210d0e9D7788572478A39acb668EB"
+  TokenStaking = "0xef9f5df9564153CCa88eD8a3401E44cD792d7431"
+  KeepRandomBeaconService = "0xD9E17Ed86615AaF0c72be605F4B7D4EDe621415b"
+
+[LibP2P]
+  Port = 3919
+  Peers = []
+
+[Storage]
+  DataDir = "/data"
+
