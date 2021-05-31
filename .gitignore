@@ -1,5 +1,5 @@
 node_modules/
-./solidity/truffle.js
+# ./solidity/truffle.js
 vendor/
 _local/
 *.swp
@@ -36,8 +36,8 @@ __pycache__
 *.pyc
 
 # Configuration files
-configs
-!configs/config.toml.SAMPLE
+# configs
+# !configs/config.toml.SAMPLE
 
 # Private testnet artifacts
 *-keep-client-deployment-bundle.tar.gz
